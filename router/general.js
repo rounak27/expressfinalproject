@@ -36,10 +36,11 @@ public_users.get('/',function (req, res) {
     booklistPromise.then((bookList)=>
     {
        
-        res.send(JSON.stringify(bookList));
+        for (const id in bookList) {
+            res.write(JSON.stringify(bookList[id]) + '\n');
+        }
         });
 });
-//    res.write(JSON.stringify(books[id]) + '\n');
 
 // Get book details based on ISBN
 public_users.get('/isbn/:isbn', function (req, res) {
@@ -47,11 +48,9 @@ public_users.get('/isbn/:isbn', function (req, res) {
 
     const getBookDetails = (isbn) => {
         return new Promise((resolve, reject) => {
-            // Check if the book exists in the local database
             if (books[isbn]) {
                 resolve(books[isbn]);
             } else {
-                // If not found, reject with an error
                 reject(new Error('Book with this ISBN not found'));
             }
         });
